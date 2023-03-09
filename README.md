@@ -1,4 +1,4 @@
-# Streamlink kick plugin
+# Streamlink Kick plugin
 
 A Simple [Kick.com](https://kick.com) plugin for [Streamlink](https://github.com/streamlink/streamlink).
 
