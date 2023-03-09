@@ -33,8 +33,6 @@ log = logging.getLogger(__name__)
 )
 class KICK(Plugin):
     def _get_streams(self):
-        self.low_latency = self.session.get_plugin_option("kick", "low-latency")
-
         API_BASE_URL = "https://kick.com/api/v1"
 
         _LIVE_SCHEMA = validate.Schema(
