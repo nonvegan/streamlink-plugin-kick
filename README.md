@@ -9,5 +9,5 @@ A Simple [Kick.com](https://kick.com) plugin for [Streamlink](https://github.com
 
 ## Usage
 ```
-streamlink --kick-low-latency kick.com/trainwreckstv best
+streamlink kick.com/trainwreckstv best
 ```
