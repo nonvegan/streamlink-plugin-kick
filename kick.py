@@ -42,25 +42,61 @@ class KICK(Plugin):
             validate.parse_json(),
             {
                 "playback_url": validate.url(path=validate.endswith(".m3u8")),
-                "livestream": {"is_live": True},
+                "livestream": {
+                    "is_live": True,
+                    "id": int,
+                    "session_title": str,
+                    "categories": [{"name": str}],
+                },
+                "user": {"username": str},
             },
-            validate.get("playback_url"),
+            validate.union_get(
+                "playback_url",
+                ("livestream", "id"),
+                ("user", "username"),
+                ("livestream", "session_title"),
+                ("livestream", "categories", 0, "name"),
+            ),
         )
 
         _VIDEO_SCHEMA = validate.Schema(
             validate.parse_json(),
             {
                 "source": validate.url(path=validate.endswith(".m3u8")),
+                "id": int,
+                "livestream": {
+                    "channel": {"user": {"username": str}},
+                    "session_title": str,
+                    "categories": [{"name": str}],
+                },
             },
-            validate.get("source"),
+            validate.union_get(
+                "source",
+                "id",
+                ("livestream", "channel", "user", "username"),
+                ("livestream", "session_title"),
+                ("livestream", "categories", 0, "name"),
+            ),
         )
 
         _CLIP_SCHEMA = validate.Schema(
             validate.parse_json(),
             {
-                "clip": {"video_url": validate.url(path=validate.endswith(".mp4"))},
+                "clip": {
+                    "video_url": validate.url(path=validate.endswith(".mp4")),
+                    "id": int,
+                    "channel": {"username": str},
+                    "title": str,
+                    "category": {"name": str},
+                },
             },
-            validate.get(("clip", "video_url")),
+            validate.union_get(
+                ("clip", "video_url"),
+                ("clip", "id"),
+                ("clip", "channel", "username"),
+                ("clip", "title"),
+                ("clip", "category", "name"),
+            ),
         )
 
         live, vod, clip = (
@@ -85,7 +121,7 @@ class KICK(Plugin):
                 )
             )
 
-            url = (
+            url, self.id, self.author, self.title, self.category = (
                 _LIVE_SCHEMA if live else (_VIDEO_SCHEMA if vod else _CLIP_SCHEMA)
             ).validate(res.text)
 
@@ -93,6 +129,10 @@ class KICK(Plugin):
             return
 
         if clip:
+            if (
+                self.author.casefold() != self.match["channel"].casefold()
+            ):  # Sanity check if the clip channel is the same as the one in the URL
+                return
             yield "source", HTTPStream(self.session, url)
         else:
             yield from HLSStream.parse_variant_playlist(self.session, url).items()
