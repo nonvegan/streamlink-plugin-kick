@@ -1,5 +1,5 @@
 """
-$description Kick
+$description Kick, a gaming livestreaming platform
 $url kick.com
 $type live, vod
 """
