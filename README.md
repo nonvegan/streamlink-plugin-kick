@@ -15,7 +15,7 @@ streamlink kick.com/trainwreckstv?clip=8113 best
 ```
 
 ---
-**NOTE**
+**TIP**
 
 You can passthrough the stream feed to your player using the [```--player-passthrough TYPES```](https://streamlink.github.io/cli.html#cmdoption-player-passthrough) option
 
