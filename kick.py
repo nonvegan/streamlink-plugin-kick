@@ -6,12 +6,16 @@ $type live, vod
 
 import re
 import cloudscraper
+import logging
 
-from streamlink.plugin import Plugin, pluginargument, pluginmatcher
+from streamlink.plugin import Plugin, pluginmatcher
 from streamlink.plugin.api import validate
 from streamlink.stream import HLSStream, HTTPStream
 from streamlink.utils.parse import parse_json
-from streamlink.exceptions import NoStreamsError, PluginError
+from streamlink.exceptions import PluginError
+
+
+log = logging.getLogger(__name__)
 
 
 @pluginmatcher(
@@ -126,16 +130,15 @@ class KICK(Plugin):
             ).validate(res.text)
 
         except (PluginError, TypeError) as err:
+            log.debug(err)
             return
 
-        if clip:
-            if (
-                self.author.casefold() != self.match["channel"].casefold()
-            ):  # Sanity check if the clip channel is the same as the one in the URL
-                return
-            yield "source", HTTPStream(self.session, url)
-        else:
+        if live or vod:
             yield from HLSStream.parse_variant_playlist(self.session, url).items()
+        elif (
+            clip and self.author.casefold() == self.match["channel"].casefold()
+        ):  # Sanity check if the clip channel is the same as the one in the URL
+            yield "source", HTTPStream(self.session, url)
 
 
 __plugin__ = KICK
