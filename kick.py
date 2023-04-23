@@ -21,7 +21,7 @@ log = logging.getLogger(__name__)
 @pluginmatcher(
     re.compile(
         # https://github.com/yt-dlp/yt-dlp/blob/9b7a48abd1b187eae1e3f6c9839c47d43ccec00b/yt_dlp/extractor/kick.py#LL33-L33C111
-        r"https?://(?:www\.)?kick\.com/(?!(?:video|categories|search|auth)(?:[/?#]|$))(?P<channel>[\w_]+)$",
+        r"https?://(?:www\.)?kick\.com/(?!(?:video|categories|search|auth)(?:[/?#]|$))(?P<channel>[\w_-]+)$",
     ),
     name="live",
 )
@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 )
 @pluginmatcher(
     re.compile(
-        r"https?://(?:www\.)?kick\.com/(?!(?:video|categories|search|auth)(?:[/?#]|$))(?P<channel>[\w_]+)\?clip=(?P<clip_id>[\d_]+)$",
+        r"https?://(?:www\.)?kick\.com/(?!(?:video|categories|search|auth)(?:[/?#]|$))(?P<channel>[\w_-]+)\?clip=(?P<clip_id>[\d_]+)$",
     ),
     name="clip",
 )
