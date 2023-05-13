@@ -110,7 +110,8 @@ class KICK(Plugin):
         )
 
         try:
-            res = cloudscraper.create_scraper().get(
+            scraper = cloudscraper.create_scraper()
+            res = scraper.get(
                 "{0}/{1}/{2}".format(
                     API_BASE_URL,
                     *(
@@ -132,6 +133,10 @@ class KICK(Plugin):
         except (PluginError, TypeError) as err:
             log.debug(err)
             return
+        
+        finally:
+            scraper.close()
+
 
         if live or vod:
             yield from HLSStream.parse_variant_playlist(self.session, url).items()
