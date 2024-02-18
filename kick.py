@@ -10,7 +10,7 @@ import logging
 
 from streamlink.plugin import Plugin, pluginmatcher
 from streamlink.plugin.api import validate
-from streamlink.stream import HLSStream, HTTPStream
+from streamlink.stream import HLSStream
 from streamlink.utils.parse import parse_json
 from streamlink.exceptions import PluginError
 
@@ -34,7 +34,7 @@ log = logging.getLogger(__name__)
 )
 @pluginmatcher(
     re.compile(
-        r"https?://(?:www\.)?kick\.com/(?!(?:video|categories|search|auth)(?:[/?#]|$))(?P<channel>[\w_-]+)\?clip=(?P<clip_id>[\d_]+)$",
+        r"https?://(?:www\.)?kick\.com/(?!(?:video|categories|search|auth)(?:[/?#]|$))(?P<channel>[\w_-]+)\?clip=(?P<clip_id>[\w_]+)$",
     ),
     name="clip",
 )
@@ -87,8 +87,8 @@ class KICK(Plugin):
             validate.parse_json(),
             {
                 "clip": {
-                    "video_url": validate.url(path=validate.endswith(".mp4")),
-                    "id": int,
+                    "video_url": validate.url(path=validate.endswith(".m3u8")),
+                    "id": str,
                     "channel": {"username": str},
                     "title": str,
                     "category": {"name": str},
@@ -137,13 +137,12 @@ class KICK(Plugin):
         finally:
             scraper.close()
 
-
         if live or vod:
             yield from HLSStream.parse_variant_playlist(self.session, url).items()
         elif (
             clip and self.author.casefold() == self.match["channel"].casefold()
         ):  # Sanity check if the clip channel is the same as the one in the URL
-            yield "source", HTTPStream(self.session, url)
+            yield "source", HLSStream(self.session, url)
 
 
 __plugin__ = KICK
