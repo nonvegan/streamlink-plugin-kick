@@ -1,6 +1,6 @@
 # Streamlink Kick plugin
 
-A Simple [Kick.com](https://kick.com) plugin for [Streamlink](https://github.com/streamlink/streamlink). This plugin uses an extra dependency [cloudscraper](https://github.com/VeNoMouS/cloudscraper) in order to access KICK's cloudflare protected public API, until KICK provides a propor one.
+A Simple [Kick.com](https://kick.com) plugin for [Streamlink](https://github.com/streamlink/streamlink). This plugin uses an extra dependency [cloudscraper](https://github.com/VeNoMouS/cloudscraper) in order to try to access KICK's cloudflare protected public API, until KICK provides a more streamlined way to do so.
 
 ## Install
 * pip install [cloudscraper](https://pypi.org/project/cloudscraper)
