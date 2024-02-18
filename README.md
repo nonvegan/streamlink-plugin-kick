@@ -11,8 +11,8 @@ A Simple [Kick.com](https://kick.com) plugin for [Streamlink](https://github.com
 ## Usage
 ```
 streamlink kick.com/trainwreckstv best
-streamlink kick.com/video/a9231a61-97ec-4f04-bd10-e7a5735f9053 best
-streamlink kick.com/trainwreckstv?clip=8113 best
+streamlink kick.com/video/c32a463d-4f4e-44f8-a5f3-88e8c5c8e720 best
+streamlink kick.com/trainwreckstv?clip=clip_01H6V5QHN7VMYHKNYVY7B6FRWW best
 ```
 
 ---
